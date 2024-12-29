@@ -1,5 +1,7 @@
 package it.spacecoding.broacastexample;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -9,7 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-
+    BroadcastExample broadcastExample = new BroadcastExample();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,5 +22,23 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        // Register the broadcast receiver
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        this.registerReceiver(broadcastExample, intentFilter);
+        super.onStart();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Unregister the broadcast receiver
+        this.unregisterReceiver(broadcastExample);
+
     }
 }
